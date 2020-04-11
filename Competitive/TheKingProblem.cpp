@@ -3,6 +3,78 @@
 
 using namespace std;
 
+int FindKings(int r, int c){
+    int AccumulatedKings = 0; 
+    int mult_r = 0;
+    int mult_c = 0;
+    int mod_r = 0; 
+    int mod_c = 0;
+
+    if((r <= 3) && (c <= 3)){
+        //All the posible boards results can be formed from this solutions.
+        if( (r == 3) && (c == 3)){
+            return 8;
+        }
+        else if( (r == 2) && (c == 2)){
+            return 3;
+        }
+        else if( (r == 1) && (c == 1)){
+            return 0;
+        }
+        else if( ((r == 2) && (c == 3)) || ((r == 3) && (c == 2))){
+            return 5;
+        }
+
+        else if( ((r == 2) && (c == 1)) || ((r == 1) && (c == 2))){
+            return 1;
+        }
+
+        else if( ((r == 3) && (c == 1)) || ((r == 1) && (c == 3))){
+            return 2;
+        }
+    }
+    else{
+        //At least one value bigger than 
+        mult_c = c / 3;
+        mult_r = r / 3;
+        mod_c = c % 3;
+        mod_r = r % 3;
+
+        if((mult_c > 0) &&  (mult_r > 0)){
+            //3 x 3 space
+            AccumulatedKings +=  mult_c * mult_r * FindKings(3,3);
+             //remaining borders
+            AccumulatedKings +=  FindKings(mod_r, 3 * mult_c);
+            AccumulatedKings +=  FindKings(3 * mult_r, mod_c);
+
+        }
+        else if((mult_r > 0) && (mult_c == 0)){
+            AccumulatedKings += mult_r * FindKings(3, mod_c);
+            
+        }
+        else if((mult_r == 0) && (mult_c > 0)){
+            AccumulatedKings += mult_c * FindKings(mod_r, 3);
+        }
+        AccumulatedKings += FindKings(mod_r, mod_c);
+    }
+    return AccumulatedKings;
+}
+
+
+int main(void){
+    int r;
+    int c;
+    int MaxKings = 0;
+    cin >> r >> c;
+    MaxKings = FindKings(r,c);
+    cout << MaxKings;
+    return 0;
+}
+
+
+//Solution B, but less eficient
+
+
 int FindMaxKings(bool** Board, int r, int c, int pos, bool KingAvailable){
     bool** BoardA;
     int MaxKings = 0;
@@ -110,27 +182,3 @@ int FindMaxKings(bool** Board, int r, int c, int pos, bool KingAvailable){
     }    
     return MaxKings;
 }
-
-
-int main(void){
-    int r;
-    int c;
-    int Kings;
-    int MaxKings = 0;
-
-    cin >> r >> c;
-    bool** board = new bool*[r]();
-    //Create the board.
-    for(int i = 0; i < r; ++i){
-        board[i] = new bool[c];
-    }   
-    MaxKings = FindMaxKings(board, r, c, 0, true);
-    Kings = FindMaxKings(board, r, c, 0, false);
-    if(Kings > MaxKings){
-        MaxKings = Kings;
-    }
-    
-    cout << MaxKings;
-    return 0;
-}
-
