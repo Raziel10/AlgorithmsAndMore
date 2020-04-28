@@ -1,54 +1,43 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 //The Cheapest Permutation problem
 
-int FindCheapestPermutation(int costs[9][9], vector<int> *a, int start, int  end){
+
+void FindCheapestPermutation2(int costs[9][9], vector<int> a, int level, vector<int>& min, int* minPermutationCost){
+    
     int permutationCost = 0;
-    int returnedCost;
-    if(start == end){
-        //compute cost
-        for(int i = 0; i < end; i++){
-            int row = a->at(i)-1;
-            int column = a->at(i+1)-1;
-            
+    int size = a.size();
+    if (size == level) 
+    { 
+        for(int i = 0; i < size - 1; i++){
+            int row = (a.at(i))-1;
+            int column = (a.at(i+1))-1;
             permutationCost += costs[row][column];
         }
-        //return cost
-        return permutationCost;
-    }
-
-    for(int j = start; j <= end; j++){
-        vector<int> a_aux = (*a);
-        //Swap value before recursive call...
-        int aux_int = a_aux[start];
-        a_aux[start] = a_aux[j];
-        a_aux[j] = aux_int;
-
-        //recursive call
-        returnedCost = FindCheapestPermutation(costs, &a_aux, start+1, end);
-        //compare returned cost
-        if (permutationCost == 0){
-            permutationCost = returnedCost;
+        if (permutationCost < *minPermutationCost){
+            *minPermutationCost = permutationCost;
+            min.assign(a.begin(), a.end());
         }
-        else if (returnedCost < permutationCost)
-        {
-            permutationCost = returnedCost;
-            a->assign(a_aux.begin(), a_aux.end());
-        }
-
+    } 
+    
+    for (int i=level; i<size; i++) 
+    { 
+        swap(a[level], a[i]);
+        FindCheapestPermutation2(costs,a,level + 1, min , minPermutationCost); 
+        swap(a[level], a[i]); 
     }
-    return permutationCost;
-}
-
-
+} 
 
 int main(void){
     int n;
     int Costs[9][9] = {0};
     int PermutationCost = 0;
+    int minPermutationCost = 65000;
     vector<int> a;
+    vector<int> m;
     
     cin >> n;
     //create original permutation with all values
@@ -61,10 +50,9 @@ int main(void){
             cin >> Costs[i][j];
         }
     }
-    PermutationCost = FindCheapestPermutation(Costs, &a, 0, n - 1);
+    FindCheapestPermutation2(Costs, a, 0, m, &minPermutationCost);
     for(int i = 0; i < n; i++){
-        cout << a[i] << " ";
+        cout << m[i] << " ";
     }
-    cout << endl;
 }
 
