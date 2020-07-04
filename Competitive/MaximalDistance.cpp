@@ -49,7 +49,7 @@ void MaximalDistance(long int n){
                 }
             }
         }
-        cout << xIndx << " " << yIndx;
+        cout << xIndx << " " << yIndx << endl;
     }
 
 }
