@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/raziel/Documents/GitHub/AlgorithmsAndMore/CMake/HelloWorld/SecondGradeEq.h
+iostream
+-
+cmath
+-
+
+/Users/raziel/Documents/GitHub/AlgorithmsAndMore/CMake/HelloWorld/helloworld.cpp
+iostream
+-
+SecondGradeEq.h
+/Users/raziel/Documents/GitHub/AlgorithmsAndMore/CMake/HelloWorld/SecondGradeEq.h
+
